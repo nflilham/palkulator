@@ -1,0 +1,2079 @@
+/* ==========================================================================
+   Hitung: KidLingo Neubrutalist Design System & Modular Stylesheet
+   Rujukan: DESIGN.md & Moodboard KidLingo (Playful, Tactile, Neubrutalist)
+   ========================================================================== */
+
+:root {
+  /* Tier 1: Primitive Tokens dari Moodboard */
+  --n-background: #2a8a43;
+  --n-surface: #ffffff;
+  --n-surface-dim: #e0daca;
+  --n-surface-bright: #fff9ed;
+  --n-surface-container-lowest: #ffffff;
+  --n-surface-container-low: #faf3e3;
+  --n-surface-container: #f4eddd;
+  --n-surface-container-high: #eee8d7;
+  --n-surface-container-highest: #e9e2d2;
+  --n-inverse-surface: #333026;
+  --n-inverse-on-surface: #f7f0e0;
+  --n-on-surface: #1e1c12;
+  --n-on-surface-variant: #4b4734;
+  --n-outline: #7d7761;
+  --n-outline-variant: #cec6ad;
+  --n-border: #000000;
+
+  --b-primary: #fde047;
+  --b-primary-fixed-dim: #e2c62d;
+  --b-on-primary-fixed: #211b00;
+
+  --b-secondary: #f472b6;
+  --b-secondary-container: #fc79bd;
+  --b-secondary-fixed: #ffd8e7;
+
+  --b-tertiary: #00696d;
+  --b-on-tertiary: #ffffff;
+  --b-tertiary-container: #3bf7ff;
+
+  --b-error: #ba1a1a;
+  --b-error-container: #ffdad6;
+  --b-on-error-container: #93000a;
+
+  /* Tier 2: Semantic Tokens (Mode Terang) */
+  --bg-page: var(--n-background);
+  --bg-surface: var(--n-surface);
+  --bg-subtle: var(--n-surface-container-low);
+  --bg-key: var(--n-surface-container);
+  --bg-key-hover: var(--n-surface-container-high);
+
+  --ink-primary: var(--n-on-surface);
+  --ink-muted: var(--n-on-surface-variant);
+  --ink-on-dark-accent: #1e1c12;
+
+  --border-subtle: #4b4734;
+  --border-strong: var(--n-border);
+
+  --core-cobalt: var(--b-tertiary);
+  --core-cobalt-hover: #004f52;
+  --core-cobalt-fg: var(--b-on-tertiary);
+
+  --accent: var(--b-primary);
+  --accent-hover: var(--b-primary-fixed-dim);
+  --accent-fg: #1e1c12;
+
+  --accent-pink: var(--b-secondary);
+  --accent-pink-hover: #ec4899;
+  --accent-pink-fg: #1e1c12;
+
+  --error-bg: var(--b-error-container);
+  --error-fg: var(--b-on-error-container);
+  --error-border: var(--n-border);
+
+  /* Tipografi Moodboard */
+  --font-display: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+
+  /* Skala Spasi & Radius Moodboard */
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  --radius-sharp: 4px;
+  --radius-sm: 4px;
+  --radius-control: 8px;
+  --radius-md: 8px;
+  --radius-key: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Bayangan Hard Offset Neubrutalist (0px blur) */
+  --shadow-hard: 4px 4px 0 #000000;
+  --shadow-key: 3px 3px 0 #000000;
+  --shadow-compact: 2px 2px 0 #000000;
+  --shadow-chassis: 8px 8px 0 #000000;
+
+  /* Rotasi Stiker Dekoratif Moodboard */
+  --rotate-tilt1: -6deg;
+  --rotate-tilt5: 6deg;
+  --rotate-tilt6: 3deg;
+  --rotate-tilt7: -2deg;
+
+  --section-pad: clamp(2.25rem, 4.5vw, 4.5rem);
+  --container-max: 76rem;
+}
+
+[data-theme="dark"] {
+  /* Mode Gelap Neubrutalist: Hutan Malam + Permukaan Hangat Gelap + Kuning/Pink Menyala */
+  --bg-page: #132a19;
+  --bg-surface: #23211a;
+  --bg-subtle: #1a1914;
+  --bg-key: #2d2a20;
+  --bg-key-hover: #3a3629;
+
+  --ink-primary: #f7f0e0;
+  --ink-muted: #cec6ad;
+  --ink-on-dark-accent: #1e1c12;
+
+  --border-subtle: #9e967d;
+  --border-strong: #000000;
+
+  --core-cobalt: #59f8ff;
+  --core-cobalt-hover: #3bf7ff;
+  --core-cobalt-fg: #002021;
+
+  --accent: #fde047;
+  --accent-hover: #ffe24c;
+  --accent-fg: #1e1c12;
+
+  --accent-pink: #f472b6;
+  --accent-pink-hover: #ffafd3;
+  --accent-pink-fg: #1e1c12;
+
+  --error-bg: #4d1414;
+  --error-fg: #ffdad6;
+  --error-border: #000000;
+}
+
+/* Dasar & Reset Ringan */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--ink-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  overflow-x: clip;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+/* Indikator Fokus Aksesibel (R-32) */
+:focus-visible {
+  outline: 3px solid var(--accent-pink);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -5rem;
+  z-index: 100;
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3.5vw, 2rem);
+}
+
+/* ==========================================================================
+   Header & Navigasi Neubrutalist
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: var(--bg-subtle);
+  border-bottom: 3px solid var(--border-strong);
+  box-shadow: 0 4px 0 #000000;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 4.5rem;
+  padding-block: 0.5rem;
+}
+
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.35rem 0.95rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-key);
+  transform: rotate(var(--rotate-tilt7));
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brand-wordmark:hover {
+  transform: rotate(0deg) translate(1px, 1px);
+  box-shadow: var(--shadow-compact);
+}
+
+.desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.desktop-nav a {
+  color: var(--ink-primary);
+  background-color: var(--bg-surface);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-compact);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.desktop-nav a:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-hard);
+}
+
+.desktop-nav a:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-theme,
+.btn-menu-mobile {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+  box-shadow: var(--shadow-hard);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-theme:hover,
+.btn-menu-mobile:hover {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-compact);
+}
+
+.btn-theme:active,
+.btn-menu-mobile:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.mobile-nav-panel {
+  border-top: 2px solid var(--border-strong);
+  background-color: var(--bg-surface);
+  padding: 0.875rem clamp(1rem, 3.5vw, 2rem) 1.125rem;
+}
+
+.mobile-nav-panel nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.mobile-nav-panel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.625rem 0.875rem;
+  color: var(--ink-primary);
+  text-decoration: none;
+  font-weight: 700;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  box-shadow: var(--shadow-compact);
+}
+
+.mobile-nav-panel a:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* ==========================================================================
+   Tombol Neubrutalist (Sesuai Button.tsx: Hard Shadow + Press Physics)
+   ========================================================================== */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-compact);
+}
+
+.btn-primary:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: var(--bg-surface);
+  color: var(--ink-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-key);
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-compact);
+}
+
+.btn-secondary:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.btn-text-action {
+  min-height: 44px;
+  padding: 0.5rem 0.875rem;
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-compact);
+  color: var(--ink-primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-text-action:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Bagian 1: Hero Neubrutalist + Sasis Kalkulator Taktil
+   ========================================================================== */
+.hero-section {
+  padding-block: clamp(2rem, 4vw, 3.75rem) var(--section-pad);
+  border-bottom: 3px solid var(--border-strong);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Kartu Hero Putih Terbingkai di Atas Kanvas Hijau (#2A8A43) */
+.hero-copy {
+  min-width: 0;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1.375rem, 3.2vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-title {
+  margin: 0 0 1.125rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.15rem, 4.6vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink-primary);
+}
+
+.hero-lead {
+  margin: 0 0 1.5rem;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-bottom: 1.75rem;
+}
+
+.hero-facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  border-top: 2px solid var(--border-strong);
+  padding-top: 1.25rem;
+}
+
+.fact-item {
+  min-width: 0;
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-compact);
+  padding: 0.625rem 0.875rem;
+}
+
+.fact-item:nth-child(2) {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.fact-item:nth-child(2) dt,
+.fact-item:nth-child(2) dd {
+  color: var(--accent-fg);
+}
+
+.fact-item dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ink-muted);
+  margin-bottom: 0.2rem;
+}
+
+.fact-item dd {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+/* Sasis Kalkulator (Neubrutalist Card Berbayangan 8px) */
+.calc-chassis {
+  min-width: 0;
+  width: 100%;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.calc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
+}
+
+/* Segmented Tabs sesuai Tabs.tsx */
+.mode-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background-color: var(--bg-key);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-compact);
+}
+
+.mode-tab {
+  min-height: 44px;
+  padding: 0.45rem 0.95rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--ink-primary);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.12s ease;
+}
+
+.mode-tab:hover {
+  background-color: var(--bg-subtle);
+}
+
+.mode-tab.is-active {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-compact);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-unit,
+.btn-history-toggle {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  color: var(--ink-primary);
+  box-shadow: var(--shadow-compact);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-unit:hover,
+.btn-history-toggle:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.btn-unit[aria-pressed="true"] {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+}
+
+.btn-history-toggle[aria-expanded="true"] {
+  background-color: var(--core-cobalt);
+  color: var(--core-cobalt-fg);
+}
+
+/* Layar Kalkulator */
+.calc-screen {
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard);
+  padding: 0.875rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.screen-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prev-expr {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+
+/* Sticker Badge sesuai Badge.tsx */
+.status-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  box-shadow: var(--shadow-compact);
+  transform: rotate(var(--rotate-tilt7));
+  flex-shrink: 0;
+}
+
+.status-tag.is-error {
+  background-color: var(--error-bg);
+  color: var(--error-fg);
+}
+
+/* Input sesuai Input.tsx */
+.expr-input {
+  width: 100%;
+  min-height: 46px;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  color: var(--ink-primary);
+  box-shadow: var(--shadow-compact);
+  font-family: var(--font-mono);
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  transition: box-shadow 0.15s ease;
+}
+
+.expr-input:focus {
+  box-shadow: var(--shadow-hard);
+}
+
+.expr-input::placeholder {
+  color: var(--ink-muted);
+}
+
+.result-output {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: right;
+  color: var(--ink-primary);
+  overflow-wrap: anywhere;
+}
+
+/* Alert Error sesuai Alert.tsx */
+.inline-error {
+  margin-top: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid var(--error-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard);
+  background-color: var(--error-bg);
+  color: var(--error-fg);
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.inline-error svg {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+/* Panel Riwayat */
+.history-drawer {
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-subtle);
+  box-shadow: var(--shadow-hard);
+  padding: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.625rem;
+}
+
+.history-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.history-empty p {
+  margin: 0 0 0.625rem;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+.btn-sample {
+  min-height: 44px;
+  padding: 0.5rem 0.875rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  box-shadow: var(--shadow-compact);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-sample:hover {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+}
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 13.5rem;
+  overflow-y: auto;
+}
+
+.history-item-btn {
+  width: 100%;
+  min-height: 44px;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-compact);
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.history-item-btn:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.history-item-expr {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+
+.history-item-btn:hover .history-item-expr,
+.history-item-btn:hover .history-item-res {
+  color: var(--accent-fg);
+}
+
+.history-item-res {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink-primary);
+  flex-shrink: 0;
+}
+
+/* Tombol Keypad Neubrutalist */
+.sci-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-bottom: 0.65rem;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.key {
+  min-height: 48px;
+  padding: 0.5rem 0.25rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-key);
+  background-color: var(--bg-key);
+  color: var(--ink-primary);
+  box-shadow: var(--shadow-key);
+  font-family: var(--font-mono);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background-color 0.1s ease, transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.key:hover {
+  background-color: var(--bg-key-hover);
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-compact);
+}
+
+.key:active,
+.key.is-pressed {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+.key-sci {
+  min-height: 44px;
+  font-size: 0.9375rem;
+  background-color: var(--bg-subtle);
+  color: var(--ink-primary);
+}
+
+.key-sci:hover {
+  background-color: var(--core-cobalt);
+  color: var(--core-cobalt-fg);
+}
+
+.key-util {
+  background-color: var(--bg-surface);
+}
+
+.key-op {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.key-op:hover {
+  background-color: var(--accent-hover);
+}
+
+.key-equals {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+}
+
+.key-equals:hover {
+  background-color: var(--accent-pink-hover);
+}
+
+/* ==========================================================================
+   Bagian 2: Ledger Spesifikasi Stiker + Workbench f(x)
+   ========================================================================== */
+.capabilities-section {
+  padding-block: var(--section-pad);
+  border-bottom: 3px solid var(--border-strong);
+}
+
+.ledger-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+}
+
+.ledger-intro {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1.25rem, 2.8vw, 1.875rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.ledger-footnote {
+  margin: 0;
+  padding-top: 0.875rem;
+  border-top: 2px solid var(--border-strong);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent-fg);
+}
+
+.ledger-footnote code {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.ledger-intro .section-title,
+.ledger-intro .section-lead {
+  color: var(--accent-fg);
+}
+
+.section-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.section-lead {
+  margin: 0;
+  color: var(--ink-muted);
+  max-width: 50ch;
+}
+
+.spec-ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.spec-row {
+  display: grid;
+  grid-template-columns: 3.1rem minmax(0, 1fr);
+  gap: 0.875rem;
+  align-items: start;
+  height: 100%;
+  padding: 1.125rem 1.25rem;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard);
+}
+
+.spec-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-compact);
+  transform: rotate(var(--rotate-tilt7));
+}
+
+.spec-row:nth-child(even) .spec-index {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+  transform: rotate(var(--rotate-tilt6));
+}
+
+.spec-body h3 {
+  margin: 0 0 0.375rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.spec-body p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+/* Workbench f(x) */
+.fx-workbench {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.fx-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--border-strong);
+  margin-bottom: 1.5rem;
+}
+
+.fx-title {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+}
+
+.fx-subtitle {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.fx-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.preset-chip {
+  min-height: 44px;
+  padding: 0.5rem 0.9375rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  color: var(--ink-primary);
+  box-shadow: var(--shadow-compact);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.12s ease;
+}
+
+.preset-chip:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  transform: translateY(-2px);
+}
+
+.fx-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.fx-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard);
+  padding: 1.25rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.field-group label {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.field-group input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  color: var(--ink-primary);
+  box-shadow: var(--shadow-compact);
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: box-shadow 0.15s ease;
+}
+
+.field-group input:focus {
+  box-shadow: var(--shadow-hard);
+}
+
+.range-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.fx-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+}
+
+.fx-note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+.fx-output {
+  min-width: 0;
+}
+
+.state-box {
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-subtle);
+  padding: 1.5rem;
+  color: var(--ink-primary);
+  font-weight: 500;
+}
+
+.state-box p {
+  margin: 0;
+}
+
+.loading-bar {
+  height: 8px;
+  width: 100%;
+  background-color: var(--bg-key);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.loading-bar::after {
+  content: "";
+  display: block;
+  width: 42%;
+  height: 100%;
+  background-color: var(--accent-pink);
+  transform: translateX(-100%);
+  animation: loading-slide 0.9s linear infinite;
+}
+
+@keyframes loading-slide {
+  to {
+    transform: translateX(260%);
+  }
+}
+
+.fx-ready {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  min-width: 0;
+}
+
+.svg-frame {
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-subtle);
+  box-shadow: var(--shadow-hard);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.svg-frame svg {
+  width: 100%;
+  height: auto;
+}
+
+.table-scroll {
+  max-height: 17.5rem;
+  overflow: auto;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-hard);
+}
+
+.fx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.875rem;
+}
+
+.fx-table th,
+.fx-table td {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1.5px solid var(--border-strong);
+}
+
+.fx-table th:last-child,
+.fx-table td:last-child {
+  text-align: right;
+}
+
+.fx-table tbody tr:nth-child(even) {
+  background-color: var(--bg-subtle);
+}
+
+.fx-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 700;
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.cell-undefined {
+  color: var(--error-fg);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Bagian 2B: Geometri Bangun Datar & Bangun Ruang 2D/3D (Neubrutalist)
+   ========================================================================== */
+.geometry-section {
+  padding-block: var(--section-pad);
+  border-bottom: 3px solid var(--border-strong);
+}
+
+.geo-intro-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1.25rem, 2.8vw, 1.875rem);
+}
+
+.geo-cat-tabs {
+  align-self: flex-start;
+}
+
+.geo-shape-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(0.875rem, 2.2vw, 1.25rem);
+}
+
+.geo-shape-chip {
+  min-height: 112px;
+  padding: 0.625rem 0.5rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  color: var(--ink-primary);
+  box-shadow: var(--shadow-compact);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  transition: transform 0.12s ease, background-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.geo-shape-thumb {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+}
+
+.geo-shape-thumb svg {
+  width: 100%;
+  height: 100%;
+  max-width: 76px;
+  max-height: 58px;
+}
+
+.geo-shape-name {
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.geo-shape-chip:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.geo-shape-chip.is-active {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+  box-shadow: var(--shadow-hard);
+}
+
+.geo-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.geo-controls-panel,
+.geo-stage-panel {
+  min-width: 0;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1.125rem, 2.5vw, 1.625rem);
+}
+
+.geo-stage-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.geo-shape-header {
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.geo-shape-title {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+  font-weight: 700;
+}
+
+.geo-shape-desc {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.geo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.geo-fields-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.geo-form-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+}
+
+.geo-form-actions .btn-primary {
+  grid-column: 1 / -1;
+}
+
+.geo-results-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.geo-metrics-grid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.geo-metric-card {
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  box-shadow: var(--shadow-compact);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.geo-metric-card.is-primary {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  box-shadow: var(--shadow-hard);
+}
+
+.geo-metric-card.is-primary dt,
+.geo-metric-card.is-primary dd,
+.geo-metric-card.is-primary .geo-metric-unit {
+  color: var(--accent-fg);
+}
+
+.geo-metric-card dt {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  margin-bottom: 0.3rem;
+}
+
+.geo-metric-card dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.125rem, 1.8vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink-primary);
+}
+
+.geo-metric-unit {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.geo-metric-card.is-primary .geo-metric-unit {
+  display: inline-block;
+  margin-top: 0;
+  margin-left: 0.45rem;
+  font-size: 0.875rem;
+}
+
+.geo-steps-wrap {
+  border-top: 2px solid var(--border-strong);
+  padding-top: 0.875rem;
+}
+
+.geo-steps-heading {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.geo-steps-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--ink-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* Panel Kanvas 2D/3D */
+.geo-stage-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-bottom: 0.875rem;
+}
+
+.geo-stage-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
+}
+
+.geo-view-tabs {
+  flex: 1 1 16rem;
+}
+
+.geo-view-tabs .mode-tab {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.geo-zoom-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.geo-stage-toggles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.geo-canvas-wrap {
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-subtle);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+}
+
+.geo-canvas {
+  width: 100%;
+  height: clamp(17rem, 38vw, 24rem);
+  display: block;
+  touch-action: none;
+  cursor: grab;
+}
+
+.geo-canvas:active {
+  cursor: grabbing;
+}
+
+.geo-stage-footer {
+  margin-top: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.geo-angle-readout {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.25rem 0.65rem;
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-compact);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.geo-hint {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+/* ==========================================================================
+   Bagian 3: Pintasan Keyboard & Akordeon Aturan
+   ========================================================================== */
+.shortcuts-section {
+  padding-block: var(--section-pad);
+  border-bottom: 3px solid var(--border-strong);
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+.shortcuts-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1.25rem, 2.8vw, 1.875rem);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.reference-accordions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border-strong);
+}
+
+.ref-item {
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  box-shadow: var(--shadow-compact);
+}
+
+.ref-item[open] {
+  background-color: var(--bg-surface);
+}
+
+.ref-item summary {
+  min-height: 44px;
+  padding: 0.625rem 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.ref-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.ref-item summary::after {
+  content: "+";
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ref-item[open] summary::after {
+  content: "-";
+}
+
+.ref-content {
+  padding: 0 0.875rem 0.875rem;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.ref-content p {
+  margin: 0;
+}
+
+.keymap-panel {
+  min-width: 0;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-chassis);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.keymap-table {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+}
+
+.keymap-table th,
+.keymap-table td {
+  text-align: left;
+  padding: 0.875rem 1.125rem;
+  border-bottom: 2px solid var(--border-strong);
+  vertical-align: middle;
+}
+
+.keymap-table th:first-child,
+.keymap-table td:first-child {
+  width: 42%;
+  min-width: 10.5rem;
+}
+
+.keymap-table thead th {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.keymap-table tbody tr:nth-child(even) {
+  background-color: var(--bg-subtle);
+}
+
+.keymap-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.kbd-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.kbd-sep {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 2rem;
+  text-align: center;
+  padding: 0.22rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  box-shadow: var(--shadow-compact);
+}
+
+/* ==========================================================================
+   Footer Neubrutalist Kompak
+   ========================================================================== */
+.site-footer {
+  padding-block: 2.5rem;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-chassis);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.footer-desc {
+  margin: 0.625rem 0 0;
+  color: var(--ink-muted);
+  max-width: 46ch;
+  font-size: 0.9375rem;
+}
+
+.footer-credit {
+  margin: 0.875rem 0 0;
+  padding-top: 0.875rem;
+  border-top: 2px solid var(--border-strong);
+  font-size: 0.9375rem;
+  color: var(--ink-primary);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 0.875rem;
+}
+
+.footer-github-link {
+  min-height: 44px;
+  padding: 0.45rem 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-fg);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-compact);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.footer-github-link:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.footer-links a {
+  min-height: 44px;
+  padding: 0.45rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-subtle);
+  color: var(--ink-primary);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-compact);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.footer-links a:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.footer-reset-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.875rem;
+  border-top: 2px solid var(--border-strong);
+}
+
+.footer-status {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+/* ==========================================================================
+   Utilitas Sembunyi & Animasi Scroll (MOTION 2)
+   ========================================================================== */
+[hidden] {
+  display: none !important;
+}
+
+.has-reveal .reveal-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.has-reveal .reveal-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Breakpoint Menengah Kecil (>= 480px)
+   ========================================================================== */
+@media (min-width: 480px) {
+  .geo-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .geo-metric-card.is-primary {
+    grid-column: 1 / -1;
+  }
+
+  .geo-fields-grid[data-fields="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .geo-fields-grid[data-fields="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================================
+   Breakpoint Menengah (Tablet >= 640px)
+   ========================================================================== */
+@media (min-width: 640px) {
+  .hero-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .calc-chassis {
+    max-width: 34rem;
+  }
+
+  .sci-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .spec-ledger {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .range-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fx-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .fx-ready {
+    grid-template-columns: minmax(0, 1.45fr) minmax(11.5rem, 0.75fr);
+    align-items: stretch;
+  }
+
+  .geo-intro-bar {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .geo-shape-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .geo-shape-strip[data-count="7"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .footer-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    align-items: stretch;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .footer-reset-row {
+    justify-content: flex-end;
+  }
+}
+
+/* ==========================================================================
+   Breakpoint Navigasi Inline (>= 900px)
+   ========================================================================== */
+@media (min-width: 900px) {
+  .desktop-nav {
+    display: flex;
+  }
+
+  .btn-menu-mobile,
+  .mobile-nav-panel {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Breakpoint Desktop Lebar (>= 1024px)
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 2.5rem;
+    align-items: stretch;
+  }
+
+  .calc-chassis {
+    max-width: none;
+  }
+
+  .ledger-layout {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .fx-grid {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+    gap: 2rem;
+  }
+
+  .geo-workbench {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .geo-shape-strip,
+  .geo-shape-strip[data-count="7"] {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  .shortcuts-grid {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 2rem;
+  }
+}
+
+/* ==========================================================================
+   Preferensi Gerak Terbatas (Aksesibilitas)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .has-reveal .reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+}

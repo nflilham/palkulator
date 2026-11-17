@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PALkulator: Kalkulator Matematika dan Geometri Interaktif</title>
+  <meta
+    name="description"
+    content="Kalkulator matematika web untuk aritmatika, fungsi ilmiah, riwayat perhitungan lokal, dan grafik tabel nilai f(x)."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body id="atas">
+  <a class="skip-link" href="#konten-utama">Langsung ke konten utama</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand-wordmark" href="#atas">PALkulator</a>
+
+      <nav class="desktop-nav" aria-label="Navigasi utama">
+        <a href="#kalkulator">Kalkulator</a>
+        <a href="#kemampuan">Grafik f(x)</a>
+        <a href="#geometri">Geometri 2D/3D</a>
+        <a href="#pintasan">Pintasan</a>
+      </nav>
+
+      <div class="header-actions">
+        <button
+          type="button"
+          id="theme-toggle"
+          class="btn-theme"
+          aria-pressed="false"
+          aria-label="Aktifkan mode gelap"
+        >
+          <svg
+            class="theme-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <span id="theme-label">Mode Gelap</span>
+        </button>
+
+        <button
+          type="button"
+          id="mobile-menu-toggle"
+          class="btn-menu-mobile"
+          aria-expanded="false"
+          aria-controls="mobile-nav-panel"
+        >
+          Menu
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-nav-panel" class="mobile-nav-panel" hidden>
+      <nav aria-label="Navigasi seluler">
+        <a href="#kalkulator">Kalkulator</a>
+        <a href="#kemampuan">Grafik f(x)</a>
+        <a href="#geometri">Geometri 2D/3D</a>
+        <a href="#pintasan">Pintasan</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="konten-utama">
+    <section id="kalkulator" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal-item">
+          <h1 class="hero-title">
+            Hitung ekspresi matematika tanpa menebak urutan operasi.
+          </h1>
+          <p class="hero-lead">
+            Kalkulator web interaktif untuk aritmatika dasar, fungsi ilmiah,
+            pita riwayat lokal, dan pemetaan tabel nilai f(x). Ketik langsung
+            dari papan ketik atau gunakan tombol taktil di samping.
+          </p>
+
+          <div class="hero-cta-group">
+            <button type="button" id="focus-calc-btn" class="btn-primary">
+              Fokus ke Kalkulator
+            </button>
+            <a href="#kemampuan" class="btn-secondary">Uji Grafik f(x)</a>
+          </div>
+
+          <dl class="hero-facts" aria-label="Spesifikasi mesin hitung">
+            <div class="fact-item">
+              <dt>Urutan Operasi</dt>
+              <dd>Kurung, Pangkat, Kali/Bagi, +/-</dd>
+            </div>
+            <div class="fact-item">
+              <dt>Satuan Sudut</dt>
+              <dd>Derajat (DEG) dan Radian (RAD)</dd>
+            </div>
+            <div class="fact-item">
+              <dt>Arsitektur</dt>
+              <dd>Parser rekursif aman tanpa eval()</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="calc-chassis reveal-item" role="region" aria-label="Kalkulator Matematika">
+          <div class="calc-toolbar">
+            <div class="mode-tabs" role="tablist" aria-label="Mode kalkulator">
+              <button
+                type="button"
+                role="tab"
+                id="tab-standar"
+                class="mode-tab is-active"
+                aria-selected="true"
+                data-mode="standar"
+              >
+                Standar
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="tab-ilmiah"
+                class="mode-tab"
+                aria-selected="false"
+                data-mode="ilmiah"
+              >
+                Ilmiah
+              </button>
+            </div>
+
+            <div class="toolbar-right">
+              <button
+                type="button"
+                id="angle-toggle"
+                class="btn-unit"
+                aria-pressed="false"
+                title="Ganti satuan sudut antara Derajat dan Radian"
+              >
+                DEG
+              </button>
+              <button
+                type="button"
+                id="history-toggle"
+                class="btn-history-toggle"
+                aria-expanded="false"
+                aria-controls="calc-history-panel"
+              >
+                Riwayat (<span id="history-count">0</span>)
+              </button>
+            </div>
+          </div>
+
+          <div class="calc-screen">
+            <div class="screen-meta">
+              <span id="calc-prev-expr" class="prev-expr" aria-live="off">Siap menghitung</span>
+              <span id="calc-status-badge" class="status-tag">SIAP</span>
+            </div>
+
+            <label class="sr-only" for="calc-expression">Ekspresi matematika</label>
+            <input
+              id="calc-expression"
+              class="expr-input"
+              type="text"
+              inputmode="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Contoh: 25 * (4 + 8)"
+            />
+
+            <div id="calc-result" class="result-output" aria-live="polite">0</div>
+
+            <div id="calc-error" class="inline-error" role="alert" hidden>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span id="calc-error-text"></span>
+            </div>
+          </div>
+
+          <div id="calc-history-panel" class="history-drawer" hidden>
+            <div class="history-header">
+              <h2 class="history-title">Pita Riwayat Hitung</h2>
+              <button type="button" id="clear-history-btn" class="btn-text-action">
+                Hapus Semua
+              </button>
+            </div>
+
+            <div id="history-storage-error" class="inline-error" role="alert" hidden>
+              <span>Penyimpanan lokal peramban tidak aktif. Riwayat hanya bertahan selama tab terbuka.</span>
+            </div>
+
+            <div id="history-empty" class="history-empty">
+              <p>Belum ada riwayat hitung. Tekan tombol = untuk menyimpan hasil pertama.</p>
+              <button type="button" id="load-sample-calc" class="btn-sample">
+                Coba contoh: 125 * (4 + 8)
+              </button>
+            </div>
+
+            <ul id="history-list" class="history-list" hidden></ul>
+          </div>
+
+          <div id="calc-sci-keys" class="sci-grid" hidden>
+            <button type="button" class="key key-sci" data-insert="sin(">sin</button>
+            <button type="button" class="key key-sci" data-insert="cos(">cos</button>
+            <button type="button" class="key key-sci" data-insert="tan(">tan</button>
+            <button type="button" class="key key-sci" data-insert="sqrt(">√</button>
+            <button type="button" class="key key-sci" data-insert="log(">log</button>
+            <button type="button" class="key key-sci" data-insert="ln(">ln</button>
+            <button type="button" class="key key-sci" data-insert="^">x^y</button>
+            <button type="button" class="key key-sci" data-insert="abs(">|x|</button>
+            <button type="button" class="key key-sci" data-insert="(">(</button>
+            <button type="button" class="key key-sci" data-insert=")">)</button>
+            <button type="button" class="key key-sci" data-insert="pi">π</button>
+            <button type="button" class="key key-sci" data-insert="e">e</button>
+          </div>
+
+          <div class="calc-grid">
+            <button type="button" class="key key-util" data-action="clear" aria-label="Hapus semua">C</button>
+            <button type="button" class="key key-util" data-action="backspace" aria-label="Hapus satu karakter">⌫</button>
+            <button type="button" class="key key-util" data-insert="%" aria-label="Persen dibagi seratus">%</button>
+            <button type="button" class="key key-op" data-insert="/" aria-label="Bagi">÷</button>
+
+            <button type="button" class="key" data-insert="7">7</button>
+            <button type="button" class="key" data-insert="8">8</button>
+            <button type="button" class="key" data-insert="9">9</button>
+            <button type="button" class="key key-op" data-insert="*" aria-label="Kali">×</button>
+
+            <button type="button" class="key" data-insert="4">4</button>
+            <button type="button" class="key" data-insert="5">5</button>
+            <button type="button" class="key" data-insert="6">6</button>
+            <button type="button" class="key key-op" data-insert="-" aria-label="Kurang">−</button>
+
+            <button type="button" class="key" data-insert="1">1</button>
+            <button type="button" class="key" data-insert="2">2</button>
+            <button type="button" class="key" data-insert="3">3</button>
+            <button type="button" class="key key-op" data-insert="+" aria-label="Tambah">+</button>
+
+            <button type="button" class="key key-util" data-action="negate" aria-label="Ubah tanda positif atau negatif">±</button>
+            <button type="button" class="key" data-insert="0">0</button>
+            <button type="button" class="key" data-insert="." aria-label="Desimal">.</button>
+            <button type="button" class="key key-equals" data-action="evaluate" aria-label="Hitung hasil">=</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kemampuan" class="capabilities-section">
+      <div class="container">
+        <div class="ledger-layout reveal-item">
+          <div class="ledger-intro">
+            <div>
+              <h2 class="section-title">Cara kerja mesin hitung di balik layar</h2>
+              <p class="section-lead">
+                Setiap ekspresi dipecah menjadi token lalu dievaluasi dengan parser
+                rekursif, sehingga aturan matematika berjalan konsisten tanpa
+                mengeksekusi string secara bebas.
+              </p>
+            </div>
+            <p class="ledger-footnote">
+              Fungsi bawaan: <code>sin</code>, <code>cos</code>, <code>tan</code>,
+              <code>sqrt</code>, <code>log</code>, <code>ln</code>, <code>abs</code>
+            </p>
+          </div>
+
+          <ol class="spec-ledger">
+            <li class="spec-row">
+              <span class="spec-index">01</span>
+              <div class="spec-body">
+                <h3>Presedensi dan kurung bersarang</h3>
+                <p>
+                  Pangkat berasosiasi dari kanan seperti notasi matematika
+                  tertulis (2^3^2 bernilai 512), sementara tanda kurung dapat
+                  ditumpuk bebas beserta perkalian implisit seperti 2(3+4) atau 2pi.
+                </p>
+              </div>
+            </li>
+            <li class="spec-row">
+              <span class="spec-index">02</span>
+              <div class="spec-body">
+                <h3>Trigonometri DEG atau RAD dan pembulatan presisi</h3>
+                <p>
+                  Fungsi sin, cos, dan tan mengikuti tombol satuan di kepala
+                  kalkulator. Hasil desimal dibersihkan dari galat aritmatika
+                  floating-point biner seperti 0.1 + 0.2 agar tampil tepat sebagai 0.3.
+                </p>
+              </div>
+            </li>
+            <li class="spec-row">
+              <span class="spec-index">03</span>
+              <div class="spec-body">
+                <h3>Diagnostik galat domain yang jelas</h3>
+                <p>
+                  Pembagian dengan nol, akar bilangan negatif, logaritma nol, dan
+                  sudut asimtot tangen (90 derajat) ditolak dengan pesan penyebab
+                  spesifik agar pengguna tahu bagian mana yang perlu diubah.
+                </p>
+              </div>
+            </li>
+            <li class="spec-row">
+              <span class="spec-index">04</span>
+              <div class="spec-body">
+                <h3>Workbench tabel nilai dan kurva f(x)</h3>
+                <p>
+                  Selain hitungan tunggal, parser yang sama dapat mengevaluasi
+                  sebuah rumus berulang kali pada rentang x tertentu untuk melihat
+                  pola kenaikan dan titik beloknya secara langsung.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="fx-workbench reveal-item" role="region" aria-label="Generator Tabel dan Grafik f(x)">
+          <div class="fx-header">
+            <div>
+              <h3 class="fx-title">Tabel Nilai dan Kurva f(x)</h3>
+              <p class="fx-subtitle">
+                Uji fungsi satu variabel secara langsung untuk melihat pasangan nilai (x, f(x)) dan bentuk grafiknya.
+              </p>
+            </div>
+            <div class="fx-presets" aria-label="Contoh rumus cepat">
+              <button type="button" class="preset-chip" data-formula="x^2 - 4" data-min="-4" data-max="4" data-step="0.5">
+                x^2 - 4
+              </button>
+              <button type="button" class="preset-chip" data-formula="sin(x)" data-min="-180" data-max="180" data-step="30">
+                sin(x)
+              </button>
+              <button type="button" class="preset-chip" data-formula="2^x" data-min="-2" data-max="5" data-step="1">
+                2^x
+              </button>
+              <button type="button" class="preset-chip" data-formula="1 / x" data-min="-3" data-max="3" data-step="1">
+                1 / x
+              </button>
+            </div>
+          </div>
+
+          <div class="fx-grid">
+            <form id="fx-form" class="fx-controls" novalidate>
+              <div class="field-group">
+                <label for="fx-formula">Rumus f(x)</label>
+                <input
+                  id="fx-formula"
+                  type="text"
+                  value="x^2 - 4"
+                  placeholder="Contoh: x^2 - 4"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+              </div>
+
+              <div class="range-row">
+                <div class="field-group">
+                  <label for="fx-min">x awal</label>
+                  <input id="fx-min" type="number" step="any" value="-4" />
+                </div>
+                <div class="field-group">
+                  <label for="fx-max">x akhir</label>
+                  <input id="fx-max" type="number" step="any" value="4" />
+                </div>
+                <div class="field-group">
+                  <label for="fx-step">Langkah</label>
+                  <input id="fx-step" type="number" step="any" value="0.5" />
+                </div>
+              </div>
+
+              <div class="fx-actions">
+                <button type="submit" class="btn-primary">Hitung Tabel</button>
+                <button type="button" id="fx-clear-btn" class="btn-secondary">
+                  Kosongkan
+                </button>
+              </div>
+
+              <p class="fx-note">
+                Catatan: fungsi trigonometri di grafik ini mengikuti pilihan satuan
+                <strong id="fx-angle-note">DEG</strong> pada kalkulator di atas.
+              </p>
+            </form>
+
+            <div class="fx-output">
+              <div id="fx-state-empty" class="state-box" hidden>
+                <p>
+                  Belum ada data tabel nilai. Masukkan rumus yang mengandung variabel
+                  <strong>x</strong> (misalnya <code>x^2 - 4</code>) lalu tekan
+                  <strong>Hitung Tabel</strong>.
+                </p>
+              </div>
+
+              <div id="fx-state-loading" class="state-box state-loading" aria-live="polite" hidden>
+                <div class="loading-bar" aria-hidden="true"></div>
+                <p id="fx-loading-text">Menghitung pasangan nilai x dan f(x)...</p>
+              </div>
+
+              <div id="fx-state-error" class="inline-error" role="alert" hidden>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span id="fx-error-text"></span>
+              </div>
+
+              <div id="fx-state-ready" class="fx-ready">
+                <div class="svg-frame">
+                  <svg
+                    id="fx-svg"
+                    viewBox="0 0 560 240"
+                    role="img"
+                    aria-label="Grafik fungsi f(x)"
+                  ></svg>
+                </div>
+
+                <div class="table-scroll" tabindex="0" aria-label="Tabel pasangan nilai x dan f(x)">
+                  <table class="fx-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">x</th>
+                        <th scope="col">f(x)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="fx-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="geometri" class="geometry-section">
+      <div class="container">
+        <div class="geo-intro-bar reveal-item">
+          <div>
+            <h2 class="section-title">Bangun Datar dan Bangun Ruang 2D/3D</h2>
+            <p class="section-lead">
+              Hitung luas, keliling, volume, dan luas permukaan, lalu putar atau
+              bolak-balikkan bentuknya 360 derajat menggunakan kursor maupun
+              tombol panah papan ketik.
+            </p>
+          </div>
+
+          <div class="mode-tabs geo-cat-tabs" role="tablist" aria-label="Kategori bangun geometri">
+            <button
+              type="button"
+              role="tab"
+              id="geo-cat-ruang"
+              class="mode-tab is-active"
+              aria-selected="true"
+              data-geo-cat="ruang"
+            >
+              Bangun Ruang (3D)
+            </button>
+            <button
+              type="button"
+              role="tab"
+              id="geo-cat-datar"
+              class="mode-tab"
+              aria-selected="false"
+              data-geo-cat="datar"
+            >
+              Bangun Datar (2D)
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="geo-shape-list"
+          class="geo-shape-strip reveal-item"
+          role="tablist"
+          aria-label="Pilih bentuk bangun"
+        ></div>
+
+        <div class="geo-workbench reveal-item">
+          <div class="geo-controls-panel">
+            <div class="geo-shape-header">
+              <h3 id="geo-active-title" class="geo-shape-title">Kubus</h3>
+              <p id="geo-active-desc" class="geo-shape-desc">
+                Bangun ruang enam sisi persegi kongruen dengan 12 rusuk sama panjang.
+              </p>
+            </div>
+
+            <form id="geo-form" class="geo-form" novalidate>
+              <div id="geo-fields-container" class="geo-fields-grid"></div>
+
+              <div class="geo-form-actions">
+                <button type="submit" class="btn-primary">Hitung &amp; Perbarui</button>
+                <button type="button" id="geo-clear-btn" class="btn-secondary">
+                  Kosongkan Input
+                </button>
+                <button type="button" id="geo-default-btn" class="btn-text-action">
+                   Ukuran Awal
+                </button>
+              </div>
+            </form>
+
+            <div id="geo-state-empty" class="state-box" hidden>
+              <p>
+                Input ukuran masih kosong. Isi dimensi bangun di atas lalu tekan
+                <strong>Hitung &amp; Perbarui</strong>, atau klik <strong>Ukuran Awal</strong>.
+              </p>
+            </div>
+
+            <div id="geo-state-loading" class="state-box state-loading" aria-live="polite" hidden>
+              <div class="loading-bar" aria-hidden="true"></div>
+              <p>Memperbarui perhitungan dan proyeksi geometri...</p>
+            </div>
+
+            <div id="geo-state-error" class="inline-error" role="alert" hidden>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span id="geo-error-text"></span>
+            </div>
+
+            <div id="geo-state-ready" class="geo-results-box" aria-live="polite">
+              <dl id="geo-metrics-list" class="geo-metrics-grid"></dl>
+              <div class="geo-steps-wrap">
+                <h4 class="geo-steps-heading">Rincian Rumus &amp; Substitusi</h4>
+                <ul id="geo-steps-list" class="geo-steps-list"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="geo-stage-panel">
+            <div class="geo-stage-toolbar">
+              <div class="geo-stage-row">
+                <div class="mode-tabs geo-view-tabs" role="tablist" aria-label="Mode tampilan dimensi">
+                  <button
+                    type="button"
+                    role="tab"
+                    id="geo-view-3d"
+                    class="mode-tab is-active"
+                    aria-selected="true"
+                    data-view-mode="3d"
+                  >
+                    3D Putar
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    id="geo-view-2d"
+                    class="mode-tab"
+                    aria-selected="false"
+                    data-view-mode="2d"
+                  >
+                    2D Proyeksi / Jaring
+                  </button>
+                </div>
+
+                <div class="geo-zoom-group">
+                  <button
+                    type="button"
+                    id="geo-zoom-out"
+                    class="btn-unit"
+                    aria-label="Perkecil tampilan"
+                  >
+                    −
+                  </button>
+                  <button
+                    type="button"
+                    id="geo-zoom-in"
+                    class="btn-unit"
+                    aria-label="Perbesar tampilan"
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    id="geo-reset-view"
+                    class="btn-unit"
+                    title="Kembalikan posisi sudut awal"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              <div class="geo-stage-toggles">
+                <button
+                  type="button"
+                  id="geo-wireframe-btn"
+                  class="btn-unit"
+                  aria-pressed="false"
+                  title="Tampilkan rangka garis tembus pandang"
+                >
+                  Rangka Garis
+                </button>
+                <button
+                  type="button"
+                  id="geo-autorotate-btn"
+                  class="btn-unit"
+                  aria-pressed="false"
+                  title="Putar objek secara otomatis"
+                >
+                  Putar Otomatis
+                </button>
+              </div>
+            </div>
+
+            <div class="geo-canvas-wrap">
+              <canvas
+                id="geo-canvas"
+                class="geo-canvas"
+                width="560"
+                height="380"
+                tabindex="0"
+                role="img"
+                aria-label="Kanvas interaktif bangun geometri 2D dan 3D. Geser dengan kursor atau tekan tombol panah untuk memutar."
+              ></canvas>
+            </div>
+
+            <div class="geo-stage-footer">
+              <span id="geo-angle-readout" class="geo-angle-readout">
+                Mode 3D | Sudut X: -24°, Y: 38° | Skala: 100%
+              </span>
+              <span class="geo-hint">
+                Geser kursor (drag) di kanvas atau fokuskan kanvas lalu tekan tombol panah untuk membolak-balik objek.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pintasan" class="shortcuts-section">
+      <div class="container shortcuts-grid">
+        <div class="shortcuts-info reveal-item">
+          <div>
+            <h2 class="section-title">Kontrol penuh lewat papan ketik</h2>
+            <p class="section-lead">
+              Seluruh kalkulator dapat dijalankan dengan Tab, Enter, dan tombol angka
+              langsung tanpa memindahkan tangan ke tetikus.
+            </p>
+          </div>
+
+          <button type="button" id="jump-to-input-btn" class="btn-primary btn-block">
+            Ketik di Layar Sekarang
+          </button>
+
+          <div class="reference-accordions">
+            <details class="ref-item">
+              <summary>Aturan penulisan fungsi dan perkalian implisit</summary>
+              <div class="ref-content">
+                <p>
+                  Gunakan tanda kurung untuk argumen fungsi, misalnya
+                  <code>sin(30)</code>, <code>sqrt(144)</code>, <code>log(100)</code>
+                  (basis 10), dan <code>ln(e)</code> (basis natural). Perkalian
+                  implisit seperti <code>2pi</code>, <code>3(4+5)</code>, dan
+                  <code>2x^2</code> didukung otomatis.
+                </p>
+              </div>
+            </details>
+
+            <details class="ref-item">
+              <summary>Perilaku tombol persen (%) dan tanda negatif</summary>
+              <div class="ref-content">
+                <p>
+                  Operator <code>%</code> membagi nilai di depannya dengan 100
+                  (misalnya <code>200 * 15%</code> menghasilkan <code>30</code>).
+                  Pangkat negatif seperti <code>-3^2</code> dihitung sebagai
+                  <code>-(3^2) = -9</code>, sedangkan <code>(-3)^2</code> bernilai
+                  <code>9</code>.
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="keymap-panel reveal-item">
+          <table class="keymap-table">
+            <caption class="sr-only">Daftar pintasan papan ketik yang aktif di kalkulator</caption>
+            <thead>
+              <tr>
+                <th scope="col">Tombol</th>
+                <th scope="col">Fungsi di Layar Kalkulator</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="kbd-group">
+                    <kbd>0</kbd><span class="kbd-sep">s.d.</span><kbd>9</kbd><kbd>.</kbd>
+                  </div>
+                </td>
+                <td>Memasukkan angka dan titik desimal</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="kbd-group">
+                    <kbd>+</kbd><kbd>-</kbd><kbd>*</kbd><kbd>/</kbd><kbd>^</kbd>
+                  </div>
+                </td>
+                <td>Menambahkan operator tambah, kurang, kali, bagi, pangkat</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="kbd-group">
+                    <kbd>(</kbd><kbd>)</kbd><kbd>%</kbd>
+                  </div>
+                </td>
+                <td>Mengelompokkan ekspresi dan mengonversi persen (/ 100)</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="kbd-group">
+                    <kbd>Enter</kbd><span class="kbd-sep">atau</span><kbd>=</kbd>
+                  </div>
+                </td>
+                <td>Mengevaluasi ekspresi dan mencatat ke pita riwayat</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="kbd-group"><kbd>Backspace</kbd></div>
+                </td>
+                <td>Menghapus satu karakter sebelum kursor</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="kbd-group"><kbd>Esc</kbd></div>
+                </td>
+                <td>Menutup menu/panel aktif atau mengosongkan layar kalkulator</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-wordmark">PALkulator</span>
+        <p class="footer-desc">
+          Proyek web pertama: kalkulator matematika, grafik f(x), dan geometri 2D/3D
+          dengan HTML, CSS, serta JavaScript murni.
+        </p>
+        <div class="footer-credit">
+          <span>Dibuat oleh <strong>Naufal Ilham Fauzan</strong></span>
+          <a
+            class="footer-github-link"
+            href="https://github.com/nflilham"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"></path>
+            </svg>
+            <span>GitHub (@nflilham)</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-meta">
+        <nav class="footer-links" aria-label="Navigasi kaki halaman">
+          <a href="#atas">Atas</a>
+          <a href="#kalkulator">Kalkulator</a>
+          <a href="#kemampuan">Grafik f(x)</a>
+          <a href="#geometri">Geometri</a>
+          <a href="#pintasan">Pintasan</a>
+        </nav>
+
+        <div class="footer-reset-row">
+          <span id="footer-status" class="footer-status" aria-live="polite"></span>
+          <button type="button" id="reset-all-btn" class="btn-text-action">
+            Reset Preferensi Lokal
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="calculator.js"></script>
+  <script src="geometry.js"></script>
+  <script src="viewer3d.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
