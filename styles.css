@@ -4,6 +4,8 @@
    ========================================================================== */
 
 :root {
+  color-scheme: light dark;
+
   /* Tier 1: Primitive Tokens dari Moodboard */
   --n-background: #2a8a43;
   --n-surface: #ffffff;
@@ -105,7 +107,14 @@
   --container-max: 76rem;
 }
 
-[data-theme="dark"] {
+[data-theme="light"],
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
+  color-scheme: light;
+}
+
+[data-theme="dark"],
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  color-scheme: dark;
   /* Mode Gelap Neubrutalist: Hutan Malam + Permukaan Hangat Gelap + Kuning/Pink Menyala */
   --bg-page: #132a19;
   --bg-surface: #23211a;
@@ -584,7 +593,8 @@ input {
   background-color: var(--bg-subtle);
 }
 
-.mode-tab.is-active {
+.mode-tab.is-active,
+.mode-tab[aria-selected="true"] {
   background-color: var(--accent);
   color: var(--accent-fg);
   border-color: var(--border-strong);
@@ -1231,6 +1241,7 @@ input {
 .table-scroll {
   max-height: 17.5rem;
   overflow: auto;
+  container-type: inline-size;
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-lg);
   background-color: var(--bg-surface);
@@ -1264,6 +1275,8 @@ input {
 .fx-table thead th {
   position: sticky;
   top: 0;
+  inset-block-start: 0;
+  z-index: 1;
   background-color: var(--accent);
   color: var(--accent-fg);
   font-weight: 700;
@@ -1363,7 +1376,8 @@ input {
   box-shadow: none;
 }
 
-.geo-shape-chip.is-active {
+.geo-shape-chip.is-active,
+.geo-shape-chip[aria-selected="true"] {
   background-color: var(--accent-pink);
   color: var(--accent-pink-fg);
   box-shadow: var(--shadow-hard);

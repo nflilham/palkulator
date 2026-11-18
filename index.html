@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    try {
+      const saved = localStorage.getItem("hitung-theme");
+      const theme = saved === "dark" || saved === "light"
+        ? saved
+        : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+      if (saved === "dark" || saved === "light") {
+        document.querySelector('meta[name="color-scheme"]').content = saved;
+      }
+    } catch (_e) {}
+  </script>
   <title>PALkulator</title>
   <meta
     name="description"
@@ -39,7 +52,21 @@
           aria-label="Aktifkan mode gelap"
         >
           <svg
-            class="theme-icon"
+            class="theme-icon theme-icon-sun"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+            hidden
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg
+            class="theme-icon theme-icon-moon"
             width="18"
             height="18"
             viewBox="0 0 24 24"
@@ -48,8 +75,7 @@
             stroke-width="2"
             aria-hidden="true"
           >
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
           <span id="theme-label">Mode Gelap</span>
         </button>
@@ -114,13 +140,15 @@
 
         <div class="calc-chassis reveal-item" role="region" aria-label="Kalkulator Matematika">
           <div class="calc-toolbar">
-            <div class="mode-tabs" role="tablist" aria-label="Mode kalkulator">
+            <div class="mode-tabs" role="tablist" focusgroup="tablist nomemory" aria-label="Mode kalkulator">
               <button
                 type="button"
                 role="tab"
                 id="tab-standar"
                 class="mode-tab is-active"
                 aria-selected="true"
+                tabindex="0"
+                focusgroupstart
                 data-mode="standar"
               >
                 Standar
@@ -131,6 +159,7 @@
                 id="tab-ilmiah"
                 class="mode-tab"
                 aria-selected="false"
+                tabindex="-1"
                 data-mode="ilmiah"
               >
                 Ilmiah
@@ -436,7 +465,7 @@
                   ></svg>
                 </div>
 
-                <div class="table-scroll" tabindex="0" aria-label="Tabel pasangan nilai x dan f(x)">
+                <div class="table-scroll" role="region" tabindex="0" aria-label="Tabel pasangan nilai x dan f(x)">
                   <table class="fx-table">
                     <thead>
                       <tr>
@@ -466,13 +495,15 @@
             </p>
           </div>
 
-          <div class="mode-tabs geo-cat-tabs" role="tablist" aria-label="Kategori bangun geometri">
+          <div class="mode-tabs geo-cat-tabs" role="tablist" focusgroup="tablist nomemory" aria-label="Kategori bangun geometri">
             <button
               type="button"
               role="tab"
               id="geo-cat-ruang"
               class="mode-tab is-active"
               aria-selected="true"
+              tabindex="0"
+              focusgroupstart
               data-geo-cat="ruang"
             >
               Bangun Ruang (3D)
@@ -483,6 +514,7 @@
               id="geo-cat-datar"
               class="mode-tab"
               aria-selected="false"
+              tabindex="-1"
               data-geo-cat="datar"
             >
               Bangun Datar (2D)
@@ -494,6 +526,7 @@
           id="geo-shape-list"
           class="geo-shape-strip reveal-item"
           role="tablist"
+          focusgroup="tablist nomemory"
           aria-label="Pilih bentuk bangun"
         ></div>
 
@@ -561,13 +594,15 @@
           <div class="geo-stage-panel">
             <div class="geo-stage-toolbar">
               <div class="geo-stage-row">
-                <div class="mode-tabs geo-view-tabs" role="tablist" aria-label="Mode tampilan dimensi">
+                <div class="mode-tabs geo-view-tabs" role="tablist" focusgroup="tablist nomemory" aria-label="Mode tampilan dimensi">
                   <button
                     type="button"
                     role="tab"
                     id="geo-view-3d"
                     class="mode-tab is-active"
                     aria-selected="true"
+                    tabindex="0"
+                    focusgroupstart
                     data-view-mode="3d"
                   >
                     3D Putar
@@ -578,6 +613,7 @@
                     id="geo-view-2d"
                     class="mode-tab"
                     aria-selected="false"
+                    tabindex="-1"
                     data-view-mode="2d"
                   >
                     2D Proyeksi / Jaring
@@ -813,9 +849,9 @@
     </div>
   </footer>
 
-  <script src="calculator.js"></script>
-  <script src="geometry.js"></script>
-  <script src="viewer3d.js"></script>
-  <script src="app.js"></script>
+  <script src="calculator.js" defer></script>
+  <script src="geometry.js" defer></script>
+  <script src="viewer3d.js" defer></script>
+  <script src="app.js" defer></script>
 </body>
 </html>

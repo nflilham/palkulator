@@ -101,9 +101,14 @@
   /* ------------------------------------------------------------------------
      Tema Terang & Gelap (R-21, R-34)
      ------------------------------------------------------------------------ */
-  function applyTheme(theme) {
+  const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+
+  function applyTheme(theme, explicitOverride) {
     const nextTheme = theme === "dark" ? "dark" : "light";
     htmlEl.setAttribute("data-theme", nextTheme);
+    if (colorSchemeMeta) {
+      colorSchemeMeta.content = explicitOverride ? nextTheme : "light dark";
+    }
 
     const isDark = nextTheme === "dark";
     themeToggleBtn.setAttribute("aria-pressed", String(isDark));
@@ -113,15 +118,11 @@
     );
     themeLabelEl.textContent = isDark ? "Mode Terang" : "Mode Gelap";
 
-    const svgIcon = themeToggleBtn.querySelector("svg");
-    if (svgIcon) {
-      if (isDark) {
-        svgIcon.innerHTML =
-          '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>';
-      } else {
-        svgIcon.innerHTML =
-          '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-      }
+    const sunIcon = themeToggleBtn.querySelector(".theme-icon-sun");
+    const moonIcon = themeToggleBtn.querySelector(".theme-icon-moon");
+    if (sunIcon && moonIcon) {
+      sunIcon.hidden = !isDark;
+      moonIcon.hidden = isDark;
     }
 
     if (typeof state.redrawGeoViewer === "function") {
@@ -132,19 +133,25 @@
   function initTheme() {
     const saved = readStorage(STORAGE_KEYS.theme);
     if (saved === "dark" || saved === "light") {
-      applyTheme(saved);
+      applyTheme(saved, true);
       return;
     }
     const prefersDark =
       window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    applyTheme(prefersDark ? "dark" : "light");
+    applyTheme(prefersDark ? "dark" : "light", false);
   }
 
   themeToggleBtn.addEventListener("click", function () {
     const current = htmlEl.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
-    applyTheme(next);
+    applyTheme(next, true);
     writeStorage(STORAGE_KEYS.theme, next);
+  });
+
+  window.addEventListener("storage", function (event) {
+    if (event.key === STORAGE_KEYS.theme) {
+      initTheme();
+    }
   });
 
   /* ------------------------------------------------------------------------
@@ -199,13 +206,13 @@
     if (state.history.length === 0) {
       historyEmptyEl.hidden = false;
       historyListEl.hidden = true;
-      historyListEl.innerHTML = "";
+      historyListEl.replaceChildren();
       return;
     }
 
     historyEmptyEl.hidden = true;
     historyListEl.hidden = false;
-    historyListEl.innerHTML = "";
+    historyListEl.replaceChildren();
 
     state.history.forEach(function (entry) {
       const li = document.createElement("li");
@@ -411,18 +418,44 @@
     }, 110);
   }
 
+  function syncTabState(tabs, activeTab) {
+    tabs.forEach(function (btn) {
+      const active = btn === activeTab;
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-selected", String(active));
+      btn.setAttribute("tabindex", active ? "0" : "-1");
+      btn.toggleAttribute("focusgroupstart", active);
+    });
+  }
+
+  function bindTablistKeyboard(tablistEl) {
+    if (!tablistEl) return;
+    tablistEl.addEventListener("keydown", function (event) {
+      const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+      if (!keys.includes(event.key)) return;
+      const tabs = Array.from(tablistEl.querySelectorAll('[role="tab"]'));
+      if (tabs.length === 0) return;
+      const idx = tabs.indexOf(document.activeElement);
+      if (idx === -1) return;
+      event.preventDefault();
+      let nextIdx = idx;
+      if (event.key === "ArrowRight") nextIdx = (idx + 1) % tabs.length;
+      else if (event.key === "ArrowLeft") nextIdx = (idx - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") nextIdx = 0;
+      else if (event.key === "End") nextIdx = tabs.length - 1;
+      tabs[nextIdx].focus();
+      tabs[nextIdx].click();
+    });
+  }
+
+  document.querySelectorAll('[role="tablist"]').forEach(bindTablistKeyboard);
+
   // Tab Standar vs Ilmiah
   tabButtons.forEach(function (tabBtn) {
     tabBtn.addEventListener("click", function () {
       const nextMode = tabBtn.getAttribute("data-mode");
       state.mode = nextMode;
-
-      tabButtons.forEach(function (btn) {
-        const active = btn.getAttribute("data-mode") === nextMode;
-        btn.classList.toggle("is-active", active);
-        btn.setAttribute("aria-selected", String(active));
-      });
-
+      syncTabState(tabButtons, tabBtn);
       sciKeysPanel.hidden = nextMode !== "ilmiah";
     });
   });
@@ -468,6 +501,9 @@
   exprInput.addEventListener("keydown", function (event) {
     if (event.key === "Enter" || event.key === "=") {
       event.preventDefault();
+      if (event.isComposing || event.keyCode === 229) {
+        return;
+      }
       const eqBtn = document.querySelector('.key[data-action="evaluate"]');
       if (eqBtn) {
         eqBtn.classList.add("is-pressed");
@@ -494,7 +530,9 @@
   function scrollAndFocusCalc() {
     const section = document.getElementById("kalkulator");
     if (section) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      const reduced =
+        window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      section.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
     }
     window.setTimeout(function () {
       exprInput.focus();
@@ -518,8 +556,21 @@
     }
   }
 
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  function createSvgEl(tag, attrs, text) {
+    const el = document.createElementNS(SVG_NS, tag);
+    Object.keys(attrs).forEach(function (k) {
+      el.setAttribute(k, String(attrs[k]));
+    });
+    if (text !== undefined) {
+      el.textContent = text;
+    }
+    return el;
+  }
+
   function renderFxPlotAndTable(points, formulaLabel) {
-    fxTableBody.innerHTML = "";
+    fxTableBody.replaceChildren();
     points.forEach(function (pt) {
       const tr = document.createElement("tr");
       const tdX = document.createElement("td");
@@ -553,8 +604,20 @@
     const plotH = height - padTop - padBottom;
 
     if (validPoints.length === 0) {
-      fxSvg.innerHTML =
-        '<text x="280" y="120" text-anchor="middle" fill="currentColor" font-family="IBM Plex Mono, monospace" font-size="13">Tidak ada titik terdefinisi pada rentang ini.</text>';
+      fxSvg.replaceChildren(
+        createSvgEl(
+          "text",
+          {
+            x: 280,
+            y: 120,
+            "text-anchor": "middle",
+            fill: "currentColor",
+            "font-family": "IBM Plex Mono, monospace",
+            "font-size": 13,
+          },
+          "Tidak ada titik terdefinisi pada rentang ini."
+        )
+      );
       return;
     }
 
@@ -590,49 +653,49 @@
       return padTop + plotH - ((val - minY) / (maxY - minY || 1)) * plotH;
     }
 
-    const svgParts = [];
+    const svgNodes = [];
 
     // Bingkai area plot
-    svgParts.push(
-      '<rect x="' +
-        padLeft +
-        '" y="' +
-        padTop +
-        '" width="' +
-        plotW +
-        '" height="' +
-        plotH +
-        '" fill="none" stroke="var(--border-subtle)" stroke-width="1" />'
+    svgNodes.push(
+      createSvgEl("rect", {
+        x: padLeft,
+        y: padTop,
+        width: plotW,
+        height: plotH,
+        fill: "none",
+        stroke: "var(--border-subtle)",
+        "stroke-width": 1,
+      })
     );
 
     // Garis sumbu X = 0 dan Y = 0 jika berada dalam rentang
     if (minX <= 0 && maxX >= 0) {
       const zx = mapX(0).toFixed(1);
-      svgParts.push(
-        '<line x1="' +
-          zx +
-          '" y1="' +
-          padTop +
-          '" x2="' +
-          zx +
-          '" y2="' +
-          (padTop + plotH) +
-          '" stroke="var(--ink-muted)" stroke-width="1.25" stroke-dasharray="4 3" />'
+      svgNodes.push(
+        createSvgEl("line", {
+          x1: zx,
+          y1: padTop,
+          x2: zx,
+          y2: padTop + plotH,
+          stroke: "var(--ink-muted)",
+          "stroke-width": 1.25,
+          "stroke-dasharray": "4 3",
+        })
       );
     }
 
     if (minY <= 0 && maxY >= 0) {
       const zy = mapY(0).toFixed(1);
-      svgParts.push(
-        '<line x1="' +
-          padLeft +
-          '" y1="' +
-          zy +
-          '" x2="' +
-          (padLeft + plotW) +
-          '" y2="' +
-          zy +
-          '" stroke="var(--ink-muted)" stroke-width="1.25" stroke-dasharray="4 3" />'
+      svgNodes.push(
+        createSvgEl("line", {
+          x1: padLeft,
+          y1: zy,
+          x2: padLeft + plotW,
+          y2: zy,
+          stroke: "var(--ink-muted)",
+          "stroke-width": 1.25,
+          "stroke-dasharray": "4 3",
+        })
       );
     }
 
@@ -653,65 +716,86 @@
 
     segments.forEach(function (seg) {
       if (seg.length >= 2) {
-        svgParts.push(
-          '<polyline fill="none" stroke="var(--core-cobalt)" stroke-width="2.75" stroke-linejoin="round" stroke-linecap="round" points="' +
-            seg.join(" ") +
-            '" />'
+        svgNodes.push(
+          createSvgEl("polyline", {
+            fill: "none",
+            stroke: "var(--core-cobalt)",
+            "stroke-width": 2.75,
+            "stroke-linejoin": "round",
+            "stroke-linecap": "round",
+            points: seg.join(" "),
+          })
         );
       }
     });
 
     // Penanda titik hasil evaluasi bergaya Neubrutalist
     validPoints.forEach(function (pt) {
-      svgParts.push(
-        '<circle cx="' +
-          mapX(pt.x).toFixed(1) +
-          '" cy="' +
-          mapY(pt.y).toFixed(1) +
-          '" r="4" fill="var(--accent-pink)" stroke="var(--border-strong)" stroke-width="1.5" />'
+      svgNodes.push(
+        createSvgEl("circle", {
+          cx: mapX(pt.x).toFixed(1),
+          cy: mapY(pt.y).toFixed(1),
+          r: 4,
+          fill: "var(--accent-pink)",
+          stroke: "var(--border-strong)",
+          "stroke-width": 1.5,
+        })
       );
     });
 
     // Label batas sumbu
-    svgParts.push(
-      '<text x="' +
-        padLeft +
-        '" y="' +
-        (height - 8) +
-        '" fill="var(--ink-muted)" font-family="IBM Plex Mono, monospace" font-size="11">x: ' +
-        window.HitungMath.formatResult(minX) +
-        "</text>"
-    );
-    svgParts.push(
-      '<text x="' +
-        (padLeft + plotW) +
-        '" y="' +
-        (height - 8) +
-        '" text-anchor="end" fill="var(--ink-muted)" font-family="IBM Plex Mono, monospace" font-size="11">x: ' +
-        window.HitungMath.formatResult(maxX) +
-        "</text>"
-    );
-    svgParts.push(
-      '<text x="' +
-        (padLeft - 6) +
-        '" y="' +
-        (padTop + 10) +
-        '" text-anchor="end" fill="var(--ink-muted)" font-family="IBM Plex Mono, monospace" font-size="11">' +
-        window.HitungMath.formatResult(maxY) +
-        "</text>"
-    );
-    svgParts.push(
-      '<text x="' +
-        (padLeft - 6) +
-        '" y="' +
-        (padTop + plotH) +
-        '" text-anchor="end" fill="var(--ink-muted)" font-family="IBM Plex Mono, monospace" font-size="11">' +
-        window.HitungMath.formatResult(minY) +
-        "</text>"
+    svgNodes.push(
+      createSvgEl(
+        "text",
+        {
+          x: padLeft,
+          y: height - 8,
+          fill: "var(--ink-muted)",
+          "font-family": "IBM Plex Mono, monospace",
+          "font-size": 11,
+        },
+        "x: " + window.HitungMath.formatResult(minX)
+      ),
+      createSvgEl(
+        "text",
+        {
+          x: padLeft + plotW,
+          y: height - 8,
+          "text-anchor": "end",
+          fill: "var(--ink-muted)",
+          "font-family": "IBM Plex Mono, monospace",
+          "font-size": 11,
+        },
+        "x: " + window.HitungMath.formatResult(maxX)
+      ),
+      createSvgEl(
+        "text",
+        {
+          x: padLeft - 6,
+          y: padTop + 10,
+          "text-anchor": "end",
+          fill: "var(--ink-muted)",
+          "font-family": "IBM Plex Mono, monospace",
+          "font-size": 11,
+        },
+        window.HitungMath.formatResult(maxY)
+      ),
+      createSvgEl(
+        "text",
+        {
+          x: padLeft - 6,
+          y: padTop + plotH,
+          "text-anchor": "end",
+          fill: "var(--ink-muted)",
+          "font-family": "IBM Plex Mono, monospace",
+          "font-size": 11,
+        },
+        window.HitungMath.formatResult(minY)
+      )
     );
 
     fxSvg.setAttribute("aria-label", "Grafik fungsi f(x) = " + formulaLabel);
-    fxSvg.innerHTML = svgParts.join("");
+    fxSvg.replaceChildren.apply(fxSvg, svgNodes);
   }
 
   function runFxEvaluation() {
@@ -812,8 +896,8 @@
     state.lastFxRunId += 1;
     state.fxHasActiveData = false;
     fxFormulaInput.value = "";
-    fxTableBody.innerHTML = "";
-    fxSvg.innerHTML = "";
+    fxTableBody.replaceChildren();
+    fxSvg.replaceChildren();
     showFxView("empty");
     fxFormulaInput.focus();
   });
@@ -904,8 +988,10 @@
     }
   }
 
+  const domParser = new DOMParser();
+
   function renderGeoShapeButtons() {
-    geoShapeListEl.innerHTML = "";
+    geoShapeListEl.replaceChildren();
     const shapes = window.HitungGeometry.SHAPES;
     const shapeIds = Object.keys(shapes).filter(function (id) {
       return shapes[id].category === geoState.category;
@@ -920,10 +1006,18 @@
       const isSelected = id === geoState.shapeId;
       btn.className = "geo-shape-chip" + (isSelected ? " is-active" : "");
       btn.setAttribute("aria-selected", String(isSelected));
+      btn.setAttribute("tabindex", isSelected ? "0" : "-1");
+      btn.toggleAttribute("focusgroupstart", isSelected);
 
       const thumb = document.createElement("span");
       thumb.className = "geo-shape-thumb";
-      thumb.innerHTML = window.HitungGeometry.getShapeSvg(id);
+      const parsedSvg = domParser.parseFromString(
+        window.HitungGeometry.getShapeSvg(id),
+        "image/svg+xml"
+      ).documentElement;
+      if (parsedSvg) {
+        thumb.replaceChildren(document.importNode(parsedSvg, true));
+      }
 
       const label = document.createElement("span");
       label.className = "geo-shape-name";
@@ -944,7 +1038,7 @@
 
     geoActiveTitleEl.textContent = spec.name;
     geoActiveDescEl.textContent = spec.summary;
-    geoFieldsContainer.innerHTML = "";
+    geoFieldsContainer.replaceChildren();
     geoFieldsContainer.setAttribute("data-fields", String(spec.fields.length));
 
     spec.fields.forEach(function (f) {
@@ -1006,7 +1100,7 @@
     window.requestAnimationFrame(function () {
       if (currentRun !== geoState.runId) return;
 
-      geoMetricsList.innerHTML = "";
+      geoMetricsList.replaceChildren();
       calcResult.metrics.forEach(function (m) {
         const card = document.createElement("div");
         card.className = "geo-metric-card" + (m.primary ? " is-primary" : "");
@@ -1030,7 +1124,7 @@
         geoMetricsList.appendChild(card);
       });
 
-      geoStepsList.innerHTML = "";
+      geoStepsList.replaceChildren();
       calcResult.steps.forEach(function (s) {
         const li = document.createElement("li");
         li.textContent = s;
@@ -1056,12 +1150,7 @@
     btn.addEventListener("click", function () {
       const cat = btn.getAttribute("data-geo-cat");
       geoState.category = cat;
-
-      geoCatButtons.forEach(function (b) {
-        const active = b.getAttribute("data-geo-cat") === cat;
-        b.classList.toggle("is-active", active);
-        b.setAttribute("aria-selected", String(active));
-      });
+      syncTabState(geoCatButtons, btn);
 
       const firstMatch = Object.keys(window.HitungGeometry.SHAPES).find(function (k) {
         return window.HitungGeometry.SHAPES[k].category === cat;
@@ -1092,10 +1181,7 @@
   function setGeoViewMode(mode) {
     geoState.viewMode = mode === "2d" ? "2d" : "3d";
     const is3D = geoState.viewMode === "3d";
-    geoView3DBtn.classList.toggle("is-active", is3D);
-    geoView3DBtn.setAttribute("aria-selected", String(is3D));
-    geoView2DBtn.classList.toggle("is-active", !is3D);
-    geoView2DBtn.setAttribute("aria-selected", String(!is3D));
+    syncTabState([geoView3DBtn, geoView2DBtn], is3D ? geoView3DBtn : geoView2DBtn);
     geoViewer.setViewMode(geoState.viewMode);
   }
 
@@ -1156,7 +1242,7 @@
     removeStorage(STORAGE_KEYS.theme);
     removeStorage(STORAGE_KEYS.history);
     state.history = [];
-    applyTheme("light");
+    initTheme();
     renderHistory();
     clearCalculator();
     footerStatusEl.textContent = "Preferensi tema dan pita riwayat telah dikosongkan.";
