@@ -861,77 +861,77 @@
 
   const SHAPE_SVGS = {
     persegi:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<rect x="20" y="12" width="40" height="40" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<path d="M20 52 L60 12" stroke="#1E1C12" stroke-width="1.6" stroke-dasharray="3 3" />' +
       '<path d="M20 44 L28 44 L28 52" fill="none" stroke="#000000" stroke-width="1.6" />' +
       "</svg>",
 
     "persegi-panjang":
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<rect x="11" y="16" width="58" height="32" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<path d="M11 48 L69 16" stroke="#1E1C12" stroke-width="1.6" stroke-dasharray="3 3" />' +
       '<path d="M11 41 L18 41 L18 48" fill="none" stroke="#000000" stroke-width="1.6" />' +
       "</svg>",
 
     segitiga:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<polygon points="40,10 13,52 67,52" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<line x1="40" y1="10" x2="40" y2="52" stroke="#1E1C12" stroke-width="1.6" stroke-dasharray="3 3" />' +
       '<path d="M40 45 L47 45 L47 52" fill="none" stroke="#000000" stroke-width="1.6" />' +
       "</svg>",
 
     lingkaran:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<circle cx="40" cy="32" r="21" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" />' +
       '<line x1="40" y1="32" x2="61" y2="32" stroke="#000000" stroke-width="2" />' +
       '<circle cx="40" cy="32" r="2.8" fill="#000000" />' +
       "</svg>",
 
     trapesium:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<polygon points="24,14 56,14 68,50 12,50" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<line x1="24" y1="14" x2="24" y2="50" stroke="#1E1C12" stroke-width="1.6" stroke-dasharray="3 3" />' +
       '<path d="M24 43 L31 43 L31 50" fill="none" stroke="#000000" stroke-width="1.6" />' +
       "</svg>",
 
     "jajar-genjang":
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<polygon points="24,14 68,14 56,50 12,50" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<line x1="24" y1="14" x2="24" y2="50" stroke="#1E1C12" stroke-width="1.6" stroke-dasharray="3 3" />' +
       '<path d="M24 43 L31 43 L31 50" fill="none" stroke="#000000" stroke-width="1.6" />' +
       "</svg>",
 
     kubus:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<polygon points="40,8 61,19 40,30 19,19" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<polygon points="19,19 40,30 40,55 19,44" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<polygon points="40,30 61,19 61,44 40,55" fill="var(--core-cobalt)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       "</svg>",
 
     balok:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<polygon points="44,10 69,20 35,32 11,22" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<polygon points="11,22 35,32 35,52 11,42" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<polygon points="35,32 69,20 69,40 35,52" fill="var(--core-cobalt)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       "</svg>",
 
     tabung:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<path d="M20 17 L20 47 A20 7.5 0 0 0 60 47 L60 17 Z" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<ellipse cx="40" cy="17" rx="20" ry="7.5" fill="var(--accent)" stroke="#000000" stroke-width="2" />' +
       '<path d="M20 47 A20 7.5 0 0 1 60 47" fill="none" stroke="#1E1C12" stroke-width="1.5" stroke-dasharray="3 3" />' +
       "</svg>",
 
     kerucut:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<path d="M40 8 L18 47 A22 7.5 0 0 0 62 47 Z" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<path d="M40 8 L40 54.5 A22 7.5 0 0 0 62 47 Z" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<path d="M18 47 A22 7.5 0 0 1 62 47" fill="none" stroke="#1E1C12" stroke-width="1.5" stroke-dasharray="3 3" />' +
       "</svg>",
 
     bola:
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<circle cx="40" cy="32" r="22" fill="var(--accent)" stroke="#000000" stroke-width="2" />' +
       '<path d="M40 10 A22 22 0 0 1 40 54 A12 22 0 0 0 40 10 Z" fill="var(--accent-pink)" stroke="#000000" stroke-width="1.6" />' +
       '<ellipse cx="40" cy="32" rx="22" ry="7" fill="none" stroke="#000000" stroke-width="1.75" />' +
@@ -939,14 +939,14 @@
       "</svg>",
 
     "limas-segiempat":
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<polygon points="40,8 15,44 43,54" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<polygon points="40,8 43,54 65,42" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<path d="M15 44 L37 33 L65 42" fill="none" stroke="#1E1C12" stroke-width="1.4" stroke-dasharray="3 3" />' +
       "</svg>",
 
     "prisma-segitiga":
-      '<svg viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64" width="76" height="58" aria-hidden="true">' +
       '<polygon points="14,50 44,50 29,21" fill="var(--accent)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<polygon points="29,21 51,12 66,41 44,50" fill="var(--accent-pink)" stroke="#000000" stroke-width="2" stroke-linejoin="round" />' +
       '<path d="M14 50 L36 41 L66 41 M29 21 L36 41" fill="none" stroke="#1E1C12" stroke-width="1.4" stroke-dasharray="3 3" />' +

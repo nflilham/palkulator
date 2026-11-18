@@ -1015,7 +1015,7 @@
         window.HitungGeometry.getShapeSvg(id),
         "image/svg+xml"
       ).documentElement;
-      if (parsedSvg) {
+      if (parsedSvg && parsedSvg.namespaceURI === SVG_NS) {
         thumb.replaceChildren(document.importNode(parsedSvg, true));
       }
 
